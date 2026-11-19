@@ -166,6 +166,10 @@ function setupWebSocket() {
   };
 
   ws.onError = (err) => {
+    // Abaikan jika server membalas 'request tidak dikenal' (karena server belum memprogram leave handler)
+    if (err.message && err.message.toLowerCase().includes('request tidak dikenal')) {
+      return;
+    }
     showAlert(`Koneksi error: ${err.message || 'Gagal terhubung ke WebSocket'}`, 'danger');
   };
 
@@ -238,9 +242,9 @@ function handleJoinRoom() {
   ws.joinRoom(roomCodeInput.value.trim());
 }
 
-function handleRemoveRoom() {
+function handleLeaveRoom() {
   if (isCallActive.value) endCall();
-  ws.removeRoom();
+  ws.leaveRoom();
   activeRoomCode.value = '';
   isPeerConnected.value = false;
   isRoomCreator.value = false;
@@ -518,7 +522,7 @@ onUnmounted(() => {
                 {{ isPeerConnected ? 'Peer Terhubung' : 'Menunggu Lawan Bicara...' }}
               </span>
               <button
-                @click="handleRemoveRoom"
+                @click="handleLeaveRoom"
                 class="text-rose-400 hover:text-rose-300 text-xs font-semibold"
               >
                 Tinggalkan Room
@@ -661,14 +665,14 @@ onUnmounted(() => {
             <span>Tamper Lab (Tahap 7)</span>
           </button>
 
-          <button
+          <!-- <button
             @click="activeTab = 'chat'"
             class="flex items-center gap-1.5 px-3.5 py-2 rounded-xl transition whitespace-nowrap font-medium"
             :class="activeTab === 'chat' ? 'bg-cyan-500 text-slate-950 font-bold' : 'text-slate-400 hover:text-slate-200'"
           >
             <MessageSquare class="w-3.5 h-3.5" />
             <span>E2E Chat</span>
-          </button>
+          </button> -->
 
           <button
             @click="activeTab = 'settings'"
