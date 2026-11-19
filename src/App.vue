@@ -238,9 +238,9 @@ function handleJoinRoom() {
   ws.joinRoom(roomCodeInput.value.trim());
 }
 
-function handleLeaveRoom() {
+function handleRemoveRoom() {
   if (isCallActive.value) endCall();
-  ws.leaveRoom();
+  ws.removeRoom();
   activeRoomCode.value = '';
   isPeerConnected.value = false;
   isRoomCreator.value = false;
@@ -518,7 +518,7 @@ onUnmounted(() => {
                 {{ isPeerConnected ? 'Peer Terhubung' : 'Menunggu Lawan Bicara...' }}
               </span>
               <button
-                @click="handleLeaveRoom"
+                @click="handleRemoveRoom"
                 class="text-rose-400 hover:text-rose-300 text-xs font-semibold"
               >
                 Tinggalkan Room

@@ -179,7 +179,7 @@ export class WebSocketService {
   /**
    * Keluar dari room
    */
-  leaveRoom() {
+  removeRoom() {
     if (this.isLoopbackMode) {
       this.currentRoom = null;
       this.isPeerConnected = false;
